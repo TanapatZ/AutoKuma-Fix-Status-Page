@@ -15,6 +15,7 @@ use std::collections::HashMap;
 #[serde_as]
 #[derive(Clone, Debug, Derivative, Serialize, Deserialize)]
 #[derivative(PartialEq)]
+
 pub struct PublicGroupMonitor {
     #[serde(rename = "id")]
     #[serde_as(as = "Option<DeserializeNumberLenient>")]
@@ -40,6 +41,7 @@ crate::default_from_serde!(PublicGroupMonitor);
 #[skip_serializing_none]
 #[serde_as]
 #[derive(Clone, Debug, Derivative, Serialize, Deserialize)]
+
 #[derivative(PartialEq)]
 pub struct PublicGroup {
     #[serde(rename = "id")]
@@ -68,6 +70,14 @@ pub enum Theme {
     Light,
     #[serde(rename = "dark")]
     Dark,
+}
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum AnalyticsType {
+    Google,
+    Umami,
+    Plausible,
+    Matomo,
 }
 
 #[serde_inline_default]
@@ -129,6 +139,9 @@ pub struct StatusPage {
     #[serde(rename = "publicGroupList")]
     #[serde_as(as = "Option<DeserializeVecLenient<PublicGroup>>")]
     pub public_group_list: Option<PublicGroupList>,
+
+    #[serde(rename = "analyticsType")]
+    pub analytics_type: Option<AnalyticsType>,
 }
 crate::default_from_serde!(StatusPage);
 
