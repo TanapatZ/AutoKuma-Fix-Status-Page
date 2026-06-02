@@ -71,14 +71,6 @@ pub enum Theme {
     #[serde(rename = "dark")]
     Dark,
 }
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum AnalyticsType {
-    Google,
-    Umami,
-    Plausible,
-    Matomo,
-}
 
 #[serde_inline_default]
 #[skip_serializing_none]
@@ -141,7 +133,7 @@ pub struct StatusPage {
     pub public_group_list: Option<PublicGroupList>,
 
     #[serde(rename = "analyticsType")]
-    pub analytics_type: Option<AnalyticsType>,
+    pub analytics_type: Option<String>,
 }
 crate::default_from_serde!(StatusPage);
 
