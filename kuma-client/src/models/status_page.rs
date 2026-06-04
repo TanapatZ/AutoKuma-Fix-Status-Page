@@ -134,8 +134,8 @@ pub struct StatusPage {
     #[serde_as(as = "Option<DeserializeVecLenient<PublicGroup>>")]
     pub public_group_list: Option<PublicGroupList>,
 
-    #[serde_as(as = "serde_with::Same")]
-    #[serde(rename = "analyticsType")]
+    #[serde_as(as = "Option<serde_with::Same>")]
+    #[serde(rename = "analyticsType", default)]
     pub analytics_type: Option<String>,
 
  
