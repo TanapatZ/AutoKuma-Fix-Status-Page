@@ -9,7 +9,15 @@ use serde::{Serialize, Deserialize, Serializer};
 use serde_inline_default::serde_inline_default;
 use serde_with::{serde_as, skip_serializing_none};
 use std::collections::HashMap;
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(transparent)]
+pub struct AlwaysSerialize(pub Option<String>);
 
+impl Default for AlwaysSerialize {
+    fn default() -> Self {
+        AlwaysSerialize(None)
+    }
+}
 
 
 #[serde_inline_default]
@@ -134,9 +142,8 @@ pub struct StatusPage {
     #[serde_as(as = "Option<DeserializeVecLenient<PublicGroup>>")]
     pub public_group_list: Option<PublicGroupList>,
 
-    #[serde_as(as = "Option<serde_with::Same>")]
     #[serde(rename = "analyticsType", default)]
-    pub analytics_type: Option<String>,
+    pub analytics_type: AlwaysSerialize,
 
  
     
