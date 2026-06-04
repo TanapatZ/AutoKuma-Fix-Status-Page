@@ -5,10 +5,12 @@ use crate::{
     monitor::MonitorType,
 };
 use derivative::Derivative;
-use serde::{Deserialize, Serialize};
+use serde::{Serialize, Deserialize, Serializer};
 use serde_inline_default::serde_inline_default;
 use serde_with::{serde_as, skip_serializing_none};
 use std::collections::HashMap;
+
+
 
 #[serde_inline_default]
 #[skip_serializing_none]
@@ -72,6 +74,11 @@ pub enum Theme {
     Dark,
 }
 
+
+pub fn serialize_none<T: Serialize, S: Serializer>(val: &T, serializer: S) -> Result<S::Ok, S::Error> {
+    val.serialize(serializer)
+}
+
 #[serde_inline_default]
 #[skip_serializing_none]
 #[serde_as]
@@ -132,9 +139,13 @@ pub struct StatusPage {
     #[serde_as(as = "Option<DeserializeVecLenient<PublicGroup>>")]
     pub public_group_list: Option<PublicGroupList>,
 
-    #[serde(rename = "analyticsType")]
+    #[serde(rename = "analyticsType", serialize_with = "serialize_none")]
     pub analytics_type: Option<String>,
+
+ 
+    
 }
+
 crate::default_from_serde!(StatusPage);
 
 pub type StatusPageList = HashMap<String, StatusPage>;
