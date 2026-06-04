@@ -74,11 +74,6 @@ pub enum Theme {
     Dark,
 }
 
-
-pub fn serialize_none<T: Serialize, S: Serializer>(val: &T, serializer: S) -> Result<S::Ok, S::Error> {
-    val.serialize(serializer)
-}
-
 #[serde_inline_default]
 #[skip_serializing_none]
 #[serde_as]
@@ -139,7 +134,8 @@ pub struct StatusPage {
     #[serde_as(as = "Option<DeserializeVecLenient<PublicGroup>>")]
     pub public_group_list: Option<PublicGroupList>,
 
-    #[serde(rename = "analyticsType", serialize_with = "serialize_none")]
+    #[serde_as(as = "serde_with::Same")]
+    #[serde(rename = "analyticsType")]
     pub analytics_type: Option<String>,
 
  
