@@ -290,6 +290,7 @@ pub struct MaintenanceSchedule {
     #[serde(rename = "dateRange")]
     #[serde_as(as = "SerializeDateRange")]
     #[serialize_always]
+    #[serde(default)]
     pub date_range: Option<Range<PrimitiveDateTime>>,
 
     #[serde(rename = "timeRange")]
