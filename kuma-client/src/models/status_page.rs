@@ -5,7 +5,7 @@ use crate::{
     monitor::MonitorType,
 };
 use derivative::Derivative;
-use serde::{Serialize, Deserialize, Serializer};
+use serde::{Serialize, Deserialize};
 use serde_inline_default::serde_inline_default;
 use serde_with::{serde_as, skip_serializing_none};
 use std::collections::HashMap;

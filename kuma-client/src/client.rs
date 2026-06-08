@@ -987,23 +987,45 @@ impl Worker {
     }
 
     pub async fn add_maintenance(self: &Arc<Self>, maintenance: &mut Maintenance) -> Result<()> {
-        let id = self
+        println!("[add_maintenance] starting");
+
+        let payload = serde_json::to_value(maintenance.clone());
+        println!("[add_maintenance] serialized maintenance: {:?}", payload);
+
+        let id = match self
             .call(
                 "addMaintenance",
-                vec![serde_json::to_value(maintenance.clone()).unwrap()],
+                vec![payload.unwrap()],
                 "/maintenanceID",
                 true,
             )
-            .await?;
+            .await
+        {
+            Ok(id) => {
+                println!("[add_maintenance] got id: {}", id);
+                id
+            }
+            Err(e) => {
+                println!("[add_maintenance] ERROR in call: {:?}", e);
+                return Err(e);
+            }
+        };
 
         maintenance.common_mut().id = Some(id);
+
+        println!("[add_maintenance] set id on maintenance");
+
         if let Some(monitors) = &maintenance.common().monitors {
+            println!("[add_maintenance] setting monitors: {:?}", monitors);
             self.set_maintenance_monitors(id, monitors).await?;
         }
+
         if let Some(status_pages) = &maintenance.common().status_pages {
+            println!("[add_maintenance] setting status_pages: {:?}", status_pages);
             self.set_maintenance_status_pages(id, status_pages).await?;
         }
 
+        println!("[add_maintenance] done");
         Ok(())
     }
 
